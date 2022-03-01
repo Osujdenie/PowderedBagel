@@ -20,7 +20,7 @@ public class DungeonGenerator : MonoBehaviour
 
     public void InitializeDungeon()
     {
-        MapManager.map = new Tile[mapWidth, mapHeigth];
+        MapManager.map = new Tile[mapWidth, mapHeigth]; // определяется размерность массива (карты) ширина на высоту    
     }
 
     public void GenerateDungeon()

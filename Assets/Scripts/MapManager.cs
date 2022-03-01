@@ -16,7 +16,7 @@ public class Position // класс, который сохран€ет позицию любой €чейки
 }
 
 [Serializable]
-public class Wall // класс, который сохран€ет информацию, дл€ алгоритма генерации подземель€
+public class Wall // класс, который сохран€ет информацию о стене, дл€ алгоритма генерации подземель€
 {
     public List<Position> positions;
     public string direction;

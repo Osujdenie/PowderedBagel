@@ -45,7 +45,7 @@ public class DungeonGenerator : MonoBehaviour
         xStartingPoint -= Random.Range(0, roomWidth); 
         yStartingPoint -= Random.Range(0, roomHeigth);
 
-        room.walls = new Wall[4]; // 4 стены ;)
+        room.walls = new Wall[4]; // 4 стены?
 
         for (int i = 0; i < room.walls.Length; i++)
         {

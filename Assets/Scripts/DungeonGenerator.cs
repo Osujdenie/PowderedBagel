@@ -18,32 +18,34 @@ public class DungeonGenerator : MonoBehaviour
 
     public bool isASCII;
 
-    public void InitializeDungeon()
+    public void InitializeDungeon() // инициализация переменных, которые будут заполняться генерацией
     {
         MapManager.map = new Tile[mapWidth, mapHeigth]; // определяется размерность массива (карты) ширина на высоту    
     }
 
-    public void GenerateDungeon()
+    public void GenerateDungeon() // создание подземелья
     {
         FirstRoom();
         DrawMap(isASCII);
     }
 
-    void FirstRoom()
+    void FirstRoom() // создание начальной комнаты
     {
         Feature room = new Feature();
         room.positions = new List<Position>();
 
+        // случайный размер комнаты, получаемый между максимальными и минимальными высотой и шириной
         int roomWidth = Random.Range(widthMinRoom, widthMaxRoom);
         int roomHeigth = Random.Range(hegthMinRoom, heigthMaxRoom);
 
+        // начальная точка комнаты 0,0 с небольшим рандомным смещением
         int xStartingPoint = mapWidth / 2;
         int yStartingPoint = mapHeigth / 2;
 
-        xStartingPoint -= Random.Range(0, roomWidth);
+        xStartingPoint -= Random.Range(0, roomWidth); 
         yStartingPoint -= Random.Range(0, roomHeigth);
 
-        room.walls = new Wall[4];
+        room.walls = new Wall[4]; // 4 стены ;)
 
         for (int i = 0; i < room.walls.Length; i++)
         {
@@ -51,6 +53,7 @@ public class DungeonGenerator : MonoBehaviour
             room.walls[i].positions = new List<Position>();
             room.walls[i].length = 0;
 
+            // выбор направления стен в комнате
             switch (i)
             {
                 case 0:
@@ -72,40 +75,44 @@ public class DungeonGenerator : MonoBehaviour
         {
             for (int x = 0; x < roomWidth; x++)
             {
+                // нахождение позиции ячейки относительно начальной точки 0,0
                 Position position = new Position();
                 position.x = xStartingPoint + x;
                 position.y = yStartingPoint + y;
 
                 room.positions.Add(position);
 
+                // добавление позиций ячеек на карту
                 MapManager.map[position.x, position.y] = new Tile();
                 MapManager.map[position.x, position.y].xPosition = position.x;
                 MapManager.map[position.x, position.y].yPosition = position.y;
 
-                if (y == 0)
+                // создание стен. (ш/в - 1) т.к. эти значения считались начиная с 1
+                if (y == 0) // если переменная у равна 0, то тайл принадлежит самой нижней строке в комнате (South)
                 {
                     room.walls[0].positions.Add(position);
                     room.walls[0].length++;
                     MapManager.map[position.x, position.y].type = "Wall";
                 }
-                else if (y == (roomHeigth - 1))
+                else if (y == roomHeigth - 1) // (North)
                 {
                     room.walls[1].positions.Add(position);
                     room.walls[1].length++;
                     MapManager.map[position.x, position.y].type = "Wall";
                 }
-                else if (x == 0)
+                else if (x == 0) // если переменна х равна 0, то тайл принадлежит самому левому столбцу (West)
                 {
                     room.walls[2].positions.Add(position);
                     room.walls[2].length++;
                     MapManager.map[position.x, position.y].type = "Wall";
                 }
-                else if (y == (roomWidth - 1))
+                else if (y == roomWidth - 1) // (East)
                 {
                     room.walls[3].positions.Add(position);
                     room.walls[3].length++;
                     MapManager.map[position.x, position.y].type = "Wall";
                 }
+                // создание пола
                 else
                 {
                     MapManager.map[position.x, position.y].type = "Floor";
@@ -118,7 +125,7 @@ public class DungeonGenerator : MonoBehaviour
         room.type = "Room";
     }
 
-    void DrawMap(bool isASCII)
+    void DrawMap(bool isASCII) // создание текстовой карты в зависимости от типа элемента
     {
         if (isASCII)
         {
@@ -126,19 +133,19 @@ public class DungeonGenerator : MonoBehaviour
 
             string asciiMap = "";
 
-            for (int y = (mapHeigth - 1); y >= 0; y--)
+            for (int y = mapHeigth - 1; y >= 0; y--) // ось у
             {
-                for(int x = 0; x < mapWidth; x++)
+                for(int x = 0; x < mapWidth; x++) // ось х
                 {
                     if (MapManager.map[x,y] != null)
                     {
-                        switch(MapManager.map[x, y].type)
+                        switch(MapManager.map[x,y].type)
                         {
                             case "Wall":
-                                asciiMap += "#";
+                                asciiMap += "#"; // стены
                                 break;
                             case "Floor":
-                                asciiMap += ".";
+                                asciiMap += "."; // пол
                                 break;
                         }
                     }
@@ -147,7 +154,7 @@ public class DungeonGenerator : MonoBehaviour
                         asciiMap += " ";
                     }
 
-                    if (x == (mapWidth - 1))
+                    if (x == mapWidth - 1)
                     {
                         asciiMap += "\n";
                     }
